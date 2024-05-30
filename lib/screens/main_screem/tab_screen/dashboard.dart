@@ -31,31 +31,15 @@ class Dashboard extends StatelessWidget {
                     ),
                   ],
                 ),
-                IconButton.outlined(
+                // IconButton.outlined(
+                //   onPressed: () {},
+                //   icon: const Icon(Icons.music_note_rounded),
+                // )
+                IconButton(
                   onPressed: () {},
-                  icon: const Icon(Icons.music_note_rounded),
-                )
+                  icon: const Icon(Icons.notifications_none),
+                ),
               ],
-            ),
-            const SizedBox(height: 30),
-            TextField(
-              decoration: InputDecoration(
-                hintText: 'Search',
-                hintStyle: const TextStyle(
-                  color: hintTextColor,
-                ),
-                prefixIcon: const Icon(
-                  Icons.search,
-                  size: 20,
-                ),
-                contentPadding: const EdgeInsets.all(10),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide.none,
-                ),
-                fillColor: Colors.white,
-                filled: true,
-              ),
             ),
             const SizedBox(height: 20),
             const SizedBox(
@@ -123,11 +107,11 @@ class Dashboard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            const ThemedPlaylist(),
-            const SizedBox(height: 10),
-            const ThemedPlaylist(),
-            const SizedBox(height: 10),
-            const ThemedPlaylist(),
+            const ThemedPlaylist(title: 'More what you like'),
+            const SizedBox(height: 20),
+            const ThemedPlaylist(title: 'Made for Hudson'),
+            const SizedBox(height: 20),
+            const ThemedPlaylist(title: 'Chill'),
           ],
         ),
       ],

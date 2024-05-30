@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:usound/widgets/list_songs/song_large.dart';
+import 'package:usound/widgets/song_item/song_large.dart';
 
 class HorizontalListSong extends StatelessWidget {
   const HorizontalListSong({super.key});

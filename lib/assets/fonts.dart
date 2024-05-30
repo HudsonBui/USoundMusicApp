@@ -35,3 +35,10 @@ const textSmallLightStyle = TextStyle(
   fontWeight: FontWeight.w300,
   decoration: TextDecoration.none,
 );
+
+const textExtraSmallLightStyle = TextStyle(
+  fontSize: 10,
+  color: Colors.white,
+  fontWeight: FontWeight.w300,
+  decoration: TextDecoration.none,
+);

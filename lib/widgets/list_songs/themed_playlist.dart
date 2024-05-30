@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:usound/assets/fonts.dart';
-import 'package:usound/widgets/list_songs/song.dart';
+import 'package:usound/widgets/song_item/song.dart';
 
 class ThemedPlaylist extends StatelessWidget {
-  const ThemedPlaylist({super.key});
-
+  const ThemedPlaylist({required this.title, super.key});
+  final String title;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -13,7 +13,7 @@ class ThemedPlaylist extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Theme\'s title', style: textNormalStyle),
+              Text(title, style: textNormalStyle),
               TextButton(
                 onPressed: () {},
                 child: const Text(
