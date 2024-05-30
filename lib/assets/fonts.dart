@@ -10,21 +10,28 @@ final textLargeStyle = GoogleFonts.lato(
 
 final textMediumStyle = GoogleFonts.lato(
   fontSize: 24,
-  fontWeight: FontWeight.bold,
   color: Colors.white,
+  fontWeight: FontWeight.bold,
   decoration: TextDecoration.none,
 );
 
 final textNormalStyle = GoogleFonts.lato(
   fontSize: 18,
-  fontWeight: FontWeight.bold,
   color: Colors.white,
+  fontWeight: FontWeight.bold,
   decoration: TextDecoration.none,
 );
 
 final textSmallStyle = GoogleFonts.lato(
   fontSize: 16,
-  fontWeight: FontWeight.bold,
   color: Colors.white,
+  fontWeight: FontWeight.w300,
+  decoration: TextDecoration.none,
+);
+
+const textSmallLightStyle = TextStyle(
+  fontSize: 16,
+  color: Colors.white,
+  fontWeight: FontWeight.w300,
   decoration: TextDecoration.none,
 );
