@@ -1,19 +1,51 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:usound/assets/colors.dart';
 import 'package:usound/assets/fonts.dart';
 
+final _firebase = FirebaseAuth.instance;
+
 class SignInWidget extends StatefulWidget {
-  const SignInWidget({super.key});
+  const SignInWidget({required this.isSignIn, super.key});
+  final void Function() isSignIn;
 
   @override
   State<SignInWidget> createState() => _SignInWidgetState();
 }
 
 class _SignInWidgetState extends State<SignInWidget> {
+  final _formKey = GlobalKey<FormState>();
+
   var _passwordVisible = false;
+  var _enterEmail = '';
+  var _enterPassword = '';
+
+  void _submit() async {
+    final isValid = _formKey.currentState!.validate();
+    if (!isValid) {
+      return;
+    }
+    _formKey.currentState!.save();
+    try {
+      final userCredential = await _firebase.signInWithEmailAndPassword(
+        email: _enterEmail,
+        password: _enterPassword,
+      );
+      print(userCredential);
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.message ?? 'Authentication Failed.'),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
+      key: _formKey, //Sử dụng formkey để có thể truy cập được vào form
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -24,6 +56,7 @@ class _SignInWidgetState extends State<SignInWidget> {
           ),
           const SizedBox(height: 20),
           TextFormField(
+            autocorrect: false,
             decoration: InputDecoration(
               hintText: 'hudson0123@gmail.com',
               hintStyle: const TextStyle(color: hintTextColor),
@@ -40,15 +73,20 @@ class _SignInWidgetState extends State<SignInWidget> {
               filled: true,
             ),
             validator: (value) {
-              if (value != null || value!.isNotEmpty) {
-                return null;
+              if (value == null ||
+                  value.trim().isEmpty ||
+                  !value.contains('@')) {
+                return 'Please enter a valid email address!';
               }
-              return 'Email không hợp lệ!';
+              return null;
+            },
+            onSaved: (value) {
+              _enterEmail = value!;
             },
           ),
           const SizedBox(height: 20),
           TextFormField(
-            obscureText: _passwordVisible,
+            obscureText: !_passwordVisible,
             decoration: InputDecoration(
               hintText: 'Enter your password',
               hintStyle: const TextStyle(
@@ -77,33 +115,47 @@ class _SignInWidgetState extends State<SignInWidget> {
               ),
             ),
             validator: (value) {
-              if (value == null || value.isEmpty || value.trim().length < 8) {
-                return 'Vui lòng nhập khẩu trên 8 chữ số!';
+              if (value == null || value.isEmpty || value.trim().length < 6) {
+                return 'Password must be at least 6 charaters long!';
               }
+
               return null;
+            },
+            onSaved: (value) {
+              _enterPassword = value!;
             },
           ),
           //Căn chỉnh trong column
-          Align(
-            alignment: Alignment.centerRight,
-            child: TextButton(
-              style: TextButton.styleFrom(
-                padding: const EdgeInsets.all(0),
-                animationDuration: Duration.zero,
-              ),
-              onPressed: () {},
-              child: Text(
-                'Forget password?',
-                style: textSmallStyle.copyWith(
-                  color: subtitleColor,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextButton(
+                onPressed: widget.isSignIn,
+                child: Text(
+                  'Create an account',
+                  style: textSmallLightStyle.copyWith(color: subtitleColor),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.end,
               ),
-            ),
+              TextButton(
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.all(0),
+                  animationDuration: Duration.zero,
+                ),
+                onPressed: () {},
+                child: Text(
+                  'Forget password?',
+                  style: textSmallLightStyle.copyWith(
+                    color: subtitleColor,
+                  ),
+                  textAlign: TextAlign.end,
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 10),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: _submit,
             style: ElevatedButton.styleFrom(
               backgroundColor: subtitleColor,
               foregroundColor: Colors.white,

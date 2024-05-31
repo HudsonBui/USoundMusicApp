@@ -1,11 +1,13 @@
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:usound/assets/colors.dart';
 import 'package:usound/assets/fonts.dart';
 import 'package:usound/assets/image_url.dart';
 import 'package:usound/screens/login/sign_in_screen.dart';
 import 'package:usound/widgets/intro/loading_widget.dart';
+import 'package:usound/widgets/sign_in_up/sign_in_widget.dart';
 
 class LoadingScreen1 extends StatefulWidget {
   const LoadingScreen1({super.key});
@@ -33,6 +35,16 @@ class _LoadingScreen1State extends State<LoadingScreen1> {
       }
     });
   }
+
+  //Testing
+  var isSignIn = true;
+  void _setIsSignIn() {
+    setState(() {
+      isSignIn = !isSignIn;
+    });
+  }
+
+  final _firebase = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {

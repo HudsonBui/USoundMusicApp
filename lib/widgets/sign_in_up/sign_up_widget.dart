@@ -1,6 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:usound/assets/colors.dart';
 import 'package:usound/assets/fonts.dart';
+
+final _firebase = FirebaseAuth.instance;
 
 class SignUpWidget extends StatefulWidget {
   const SignUpWidget({required this.isSignIn, super.key});
@@ -14,10 +17,41 @@ class SignUpWidget extends StatefulWidget {
 class _SignInWidgetState extends State<SignUpWidget> {
   var _passwordVisible = false;
   var _repasswordVisible = false;
+  var _checkRePassword = '';
+
+  var _enteredEmail = '';
+  var _enteredPassword = '';
+  var _enteredRePassword = '';
+
+  final _formKey = GlobalKey<FormState>();
+
+  void _submit() async {
+    var isValid = _formKey.currentState!.validate();
+    if (!isValid) {
+      return;
+    }
+
+    _formKey.currentState!.save();
+    try {
+      final userCredential = await _firebase.createUserWithEmailAndPassword(
+        email: _enteredEmail,
+        password: _enteredRePassword,
+      );
+      print(userCredential);
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.message ?? 'Authentication Failed.'),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Form(
+      key: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -44,15 +78,20 @@ class _SignInWidgetState extends State<SignUpWidget> {
               filled: true,
             ),
             validator: (value) {
-              if (value != null || value!.isNotEmpty) {
-                return null;
+              if (value == null ||
+                  value.trim().isEmpty ||
+                  !value.contains('@')) {
+                return 'Please enter a valid email address!';
               }
-              return 'Email không hợp lệ!';
+              return null;
+            },
+            onSaved: (value) {
+              _enteredEmail = value!;
             },
           ),
           const SizedBox(height: 20),
           TextFormField(
-            obscureText: _passwordVisible,
+            obscureText: !_passwordVisible,
             decoration: InputDecoration(
               hintText: 'Enter your password',
               hintStyle: const TextStyle(
@@ -81,15 +120,19 @@ class _SignInWidgetState extends State<SignUpWidget> {
               ),
             ),
             validator: (value) {
-              if (value == null || value.isEmpty || value.trim().length < 8) {
-                return 'Vui lòng nhập khẩu trên 8 chữ số!';
+              if (value == null || value.isEmpty || value.trim().length < 6) {
+                return 'Password must be at least 6 charaters long!';
               }
+              _checkRePassword = value;
               return null;
+            },
+            onSaved: (value) {
+              _enteredPassword = value!;
             },
           ),
           const SizedBox(height: 20),
           TextFormField(
-            obscureText: _passwordVisible,
+            obscureText: !_repasswordVisible,
             decoration: InputDecoration(
               hintText: 'Re-enter your password',
               hintStyle: const TextStyle(
@@ -118,10 +161,16 @@ class _SignInWidgetState extends State<SignUpWidget> {
               ),
             ),
             validator: (value) {
-              if (value == null || value.isEmpty || value.trim().length < 8) {
-                return 'Mật khẩu không khớp';
+              if (value == null ||
+                  value.isEmpty ||
+                  value.trim().length < 6 ||
+                  _checkRePassword != value) {
+                return 'Password must be at least 6 charaters long or Password does not match!';
               }
               return null;
+            },
+            onSaved: (value) {
+              _enteredRePassword = value!;
             },
           ),
           //Căn chỉnh trong column
@@ -144,7 +193,7 @@ class _SignInWidgetState extends State<SignUpWidget> {
           ),
           const SizedBox(height: 10),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: _submit,
             style: ElevatedButton.styleFrom(
               backgroundColor: subtitleColor,
               foregroundColor: Colors.white,
@@ -154,7 +203,7 @@ class _SignInWidgetState extends State<SignUpWidget> {
               ),
             ),
             child: Text(
-              'Sign un',
+              'Sign up',
               style: textNormalStyle,
               textAlign: TextAlign.center,
             ),

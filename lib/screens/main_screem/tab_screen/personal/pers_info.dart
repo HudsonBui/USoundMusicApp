@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -66,6 +67,25 @@ class PersonalInforScreen extends StatelessWidget {
               style: textSmallLightStyle,
             ),
             trailing: const Icon(Icons.keyboard_arrow_right),
+          ),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            onTap: () {
+              FirebaseAuth.instance.signOut();
+            },
+            title: Row(
+              children: [
+                Text(
+                  'Log out',
+                  style: textSmallLightStyle.copyWith(color: Colors.redAccent),
+                ),
+                const SizedBox(width: 10),
+                const Icon(
+                  Icons.exit_to_app,
+                  color: Colors.redAccent,
+                )
+              ],
+            ),
           ),
         ],
       ),

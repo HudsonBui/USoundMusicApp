@@ -70,7 +70,7 @@ class _SignInPageState extends State<SignInPage> {
                 ),
                 const SizedBox(height: 20),
                 isSignIn
-                    ? const SignInWidget()
+                    ? SignInWidget(isSignIn: _setIsSignIn)
                     : SignUpWidget(isSignIn: _setIsSignIn),
                 const SizedBox(height: 20),
                 Row(
@@ -123,29 +123,6 @@ class _SignInPageState extends State<SignInPage> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                isSignIn
-                    ? ElevatedButton(
-                        onPressed: _setIsSignIn,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: subtitleColor,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.all(10),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Sign up',
-                              style: textNormalStyle,
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      )
-                    : Container(),
               ],
             ),
           ),
